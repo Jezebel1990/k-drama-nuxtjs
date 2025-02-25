@@ -15,7 +15,7 @@
                         <NuxtLink to="/" class="text-black hover:text-pink-500 active:text-pink-700 transition-colors duration-300">Home</NuxtLink>
                     </li>
                     <li>
-                        <NuxtLink to="/" class="text-black hover:text-pink-500 active:text-pink-700 transition-colors duration-300">About</NuxtLink>
+                        <NuxtLink to="/" class="text-black hover:text-pink-500 active:text-pink-700 transition-colors duration-300">Sobre</NuxtLink>
                     </li>
                 </ul>
             </div>

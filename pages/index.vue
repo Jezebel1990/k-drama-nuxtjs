@@ -10,9 +10,16 @@
           <div class="h-10 w-full font-sans bg-pink-500">
             <h1 class="text-2xl px-4 text-white font-bold">Mais Populares:</h1>
           </div>
-          <div v-if="loadingPopular" class="text-center text-gray-500">Carregando...</div>
-          <div v-else-if="errorPopular" class="text-center text-red-500">Erro ao carregar os dados.</div>
-          <TopDrama v-else-if="popularDramas.length" :topDrama="popularDramas" />
+          <div v-if="loadingPopular" class="text-center text-gray-500">
+            Carregando...
+          </div>
+          <div v-else-if="errorPopular" class="text-center text-red-500">
+            Erro ao carregar os dados.
+          </div>
+          <TopDrama
+            v-else-if="popularDramas.length"
+            :topDrama="popularDramas"
+          />
         </div>
 
         <!-- Seção de Últimos Doramas -->
@@ -20,8 +27,12 @@
           <div class="h-10 w-full bg-pink-500">
             <h1 class="text-2xl px-4 text-white font-bold">Últimos Doramas:</h1>
           </div>
-          <div v-if="loadingLatest" class="text-center text-gray-500">Carregando...</div>
-          <div v-else-if="errorLatest" class="text-center text-red-500">Erro ao carregar os dados.</div>
+          <div v-if="loadingLatest" class="text-center text-gray-500">
+            Carregando...
+          </div>
+          <div v-else-if="errorLatest" class="text-center text-red-500">
+            Erro ao carregar os dados.
+          </div>
           <div class="popularityDrama flex flex-wrap justify-center">
             <template v-if="latestDramas.length">
               <Card
@@ -36,7 +47,7 @@
                     height="266"
                     :alt="drama.name"
                     loading="lazy"
-                    @error="setPlaceholderImage($event)"
+                    @error="setPlaceholderImage(drama.id, 'latest')"
                   />
                 </template>
                 <template #content>
@@ -49,23 +60,23 @@
                 </template>
                 <template #vote_average>
                   <div class="flex items-center">
+                    <StarRating :vote_average="drama.vote_average" />
                     <span class="ml-2">{{ drama.vote_average }} /10</span>
                   </div>
                 </template>
               </Card>
             </template>
-
-            <!-- Componente de Paginação -->
-            <Pagination
-              v-if="!loadingLatest"
-              :currentPage="currentPage"
-              :totalPages="totalPages"
-              @pageChanged="handlePageChange"
-            />
           </div>
         </div>
       </div>
     </div>
+    <!-- Componente de Paginação -->
+    <Pagination
+      v-if="!loadingLatest"
+      :currentPage="currentPage"
+      :totalPages="totalPages"
+      @pageChanged="handlePageChange"
+    />
 
     <!-- Footer -->
     <Footer />
@@ -74,7 +85,7 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, onMounted, watchEffect } from "vue";
+import { ref, onMounted } from "vue";
 import Pagination from "@/components/Pagination.vue";
 import StarRating from "@/components/StarRating.vue"; // Componente de estrelas
 import { useNuxtApp } from "#app";
@@ -163,16 +174,23 @@ const handlePageChange = (page) => {
   fetchLatestDramas(page);
 };
 
-// Função para gerar o src da imagem, com fallback
+// Função para gerar o src da imagem
 const getDramaImageSrc = (poster_path) => {
   return `https://image.tmdb.org/t/p/w500/${poster_path}`;
 };
 
-// Fallback para imagens quebradas
-const setPlaceholderImage = (event) => {
-  event.target.src = "/default.png"; 
+// Função para remover dramas com imagens quebradas
+const setPlaceholderImage = (dramaId, type) => {
+  if (type === "latest") {
+    latestDramas.value = latestDramas.value.filter(
+      (drama) => drama.id !== dramaId
+    );
+  } else if (type === "popular") {
+    popularDramas.value = popularDramas.value.filter(
+      (drama) => drama.id !== dramaId
+    );
+  }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

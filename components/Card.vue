@@ -2,7 +2,7 @@
   <div
     class="card rounded-md bg-white shadow-lg mx-2 my-4 w-48 flex flex-col max-w-fit overflow-hidden hover:bg-slate-200 transition duration-300"
   >
-    <div class="image w-full h-64 overflow-hidden flex items-center justify-center">
+    <div class="image overflow-hidden flex items-center justify-center">
       <slot name="image"></slot>
     </div>
 
@@ -11,7 +11,6 @@
     </div>
 
     <div class="vote_average p-2 flex items-center justify-center">
-      <StarRating :vote_average="rating" />  
       <slot name="vote_average"></slot>  
     </div>
 

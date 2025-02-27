@@ -2,7 +2,7 @@
   <div class="background-container text-center min-h-screen">
     <Navigation />
 
-    <div v-if="response" class="response.name">
+    <div v-if="response" class="content-container">
       <div class="flex justify-center font-sans">
         <Card class="w-full p-6 card-background">
           <template #content>
@@ -31,9 +31,10 @@
 
             <div class="mt-6">
               <h3 class="font-semibold">Avaliação:</h3>
-              <div class="flex items-center mt-1">
-                <StarRating :vote_average="rating" class="mr-2" />
-                <span>{{ response.vote_average }}/10</span>
+              <div class="flex items-center mt-1 space-x-2">
+                <span class="font-medium">{{ response.vote_average }}/10</span>
+                <StarRating :vote_average="response.vote_average" class="mr-2" />
+                <span>({{ response.vote_count }})</span>
               </div>
             </div>
 
@@ -70,12 +71,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { useRuntimeConfig } from "#imports";
 import countries from "i18n-iso-countries";
 import ptLocale from "i18n-iso-countries/langs/pt.json";
-import { computed } from "vue";
+import StarRating from "@/components/StarRating.vue";
 
 countries.registerLocale(ptLocale);
 
@@ -146,10 +147,8 @@ const imageUrl = computed(() => {
     ? `https://image.tmdb.org/t/p/w500${response.value.backdrop_path}`
     : response.value?.poster_path
     ? `https://image.tmdb.org/t/p/w500${response.value.poster_path}`
-    : "/love-drama.png"; 
+    : "/love-drama.png";
 });
-
-
 </script>
 
 <style scoped>
@@ -174,7 +173,7 @@ const imageUrl = computed(() => {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  opacity: 0.2; 
+  opacity: 0.2;
   z-index: 0;
 }
 

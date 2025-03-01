@@ -3,7 +3,7 @@
     <Navigation />
 
     <div v-if="response" class="content-container">
-      <div class="flex justify-center font-sans">
+      <div class="flex justify-center font-sans mt-2">
         <Card class="w-full p-6 card-background">
           <template #content>
             <h1 class="font-bold mb-4 text-2xl">{{ response.name }}</h1>
